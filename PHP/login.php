@@ -21,13 +21,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        // TODO: vérification MySQL, session, redirection selon le rôle
-        $errors[] = 'Authentication is not available yet.';
+        $stmt = $pdo->prepare('SELECT id_utilisateur, nom_utilisateur, email, mot_de_passe_hash, role FROM Utilisateur WHERE email = :email AND actif = 1 LIMIT 1');
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['mot_de_passe_hash'])) {
+            session_regenerate_id(true);
+            $_SESSION['user_id'] = (int) $user['id_utilisateur'];
+            $_SESSION['user_name'] = $user['nom_utilisateur'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['role'] = $user['role'];
+            header('Location: dashboard.php');
+            exit;
+        }
+        $errors[] = 'Email or password is incorrect.';
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,3 +150,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
+
