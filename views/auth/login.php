@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Connexion · Gestio Pédagogique</title><link rel="stylesheet" href="css/login.css"></head>
+<body class="login-page">
+<header class="site-header"><div class="logo-placeholder"><img src="images/logo.png" alt="Logo"></div><span class="app-name">Gestio Pédagogique</span></header>
+<main class="login-container"><section class="login-card"><header class="login-header"><div class="card-icon" aria-hidden="true">↗</div><h1 class="welcome-message">Bienvenue</h1><p class="welcome-subtitle">Connectez-vous pour accéder à votre espace pédagogique.</p></header>
+<?php if ($errors): ?><div class="form-errors" role="alert"><ul><?php foreach ($errors as $error): ?><li><?= htmlspecialchars($error,ENT_QUOTES,'UTF-8') ?></li><?php endforeach; ?></ul></div><?php endif; ?>
+<form class="login-form" action="?route=login" method="post"><div class="form-group"><label for="email">Adresse email</label><input type="email" id="email" name="email" value="<?= htmlspecialchars($email,ENT_QUOTES,'UTF-8') ?>" autocomplete="username" required></div><div class="form-group"><label for="password">Mot de passe</label><div class="password-field"><input type="password" id="password" name="password" autocomplete="current-password" required><button type="button" id="toggle-password" class="toggle-password" aria-controls="password" aria-pressed="false">Afficher</button></div></div><button type="submit" class="login-button">Se connecter</button></form>
+</section></main><script src="js/login.js" defer></script></body></html>
