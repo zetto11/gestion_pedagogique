@@ -6,21 +6,29 @@ namespace App\Core;
 abstract class Controller
 {
     protected function render(string $view, array $data = [], ?array $layout = null): void
-    {
-        extract($data, EXTR_SKIP);
-        $viewFile = dirname(__DIR__) . '/views/' . $view . '.php';
-        if (!is_file($viewFile)) {
-            throw new \RuntimeException('View not found: ' . $view);
-        }
-        if ($layout === null) {
-            require $viewFile;
-            return;
-        }
-        ob_start();
-        require $viewFile;
-        $pageContent = ob_get_clean();
-        require dirname(__DIR__) . '/views/layouts/dashboard.php';
+{
+    extract($data, EXTR_SKIP);
+
+    // Go two levels up to the project root
+    $viewFile = dirname(__DIR__, 2) . '/views/' . $view . '.php';
+
+    if (!is_file($viewFile)) {
+        throw new \RuntimeException(
+            'View not found: ' . $view . ' | Path: ' . $viewFile
+        );
     }
+
+    if ($layout === null) {
+        require $viewFile;
+        return;
+    }
+
+    ob_start();
+    require $viewFile;
+    $pageContent = ob_get_clean();
+
+    require dirname(__DIR__, 2) . '/views/layouts/dashboard.php';
+}
 
     protected function requireRole(string $role): void
     {
